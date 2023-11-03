@@ -1,27 +1,30 @@
-const container = document.getElementById("container");
-let smileys = ["😄", "😃", "😀", "😁", "😆"];
-const voteCounts = new Array(smileys.length).fill(0);
+const smileys = ["😄", "😃", "😀", "😁", "😆"];
 
-function updateVoteCount() {
-  container.innerHTML = "";
-  smileys.forEach((smiley, index) => {
-    const smileyBut = document.createElement("button");
-    smileyBut.className = "smiley";
-    smileyBut.textContent = smiley;
-    smileyBut.addEventListener("click", () => {
-      voteCounts[index]++;
-      updateVoteCount();
-    });
+const container = document.getElementById('container');
 
-    const voteCountDiv = document.createElement("div");
-    voteCountDiv.className = "vote-count";
-    voteCountDiv.textContent = voteCounts[index];
+smileys.forEach(element => {
+    const smiley = document.createElement('div');
+    smiley.className = 'smiley';
+    smiley.dataset.votes = 0;
 
-    const cardDiv = document.createElement("div");
-    container.appendChild(cardDiv);
-    cardDiv.appendChild(smileyBut);
-    cardDiv.appendChild(voteCountDiv);
-  });
-}
+    const smileySpan = document.createElement('span');
+    smileySpan.textContent = element;
 
-updateVoteCount();
+    const votesSpan = document.createElement('span');
+    votesSpan.className = 'votesSpan';
+    votesSpan.textContent = '0';
+
+    smiley.appendChild(smileySpan);
+    smiley.appendChild(votesSpan);
+
+    container.appendChild(smiley);
+});
+
+container.addEventListener('click', function(event) {
+    const smiley = event.target.closest('.smiley');
+    if (smiley) {
+        const votes = parseInt(smiley.dataset.votes, 10);
+        smiley.dataset.votes = votes + 1;
+        smiley.querySelector('span:last-child').textContent = votes + 1;
+    }
+});
